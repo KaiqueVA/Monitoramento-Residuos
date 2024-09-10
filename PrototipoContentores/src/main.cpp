@@ -30,8 +30,6 @@ void setup()
     TinyGPSPlus gps;
     VL53L0X sensor;
 
-
-
     Serial.begin(BAUDRATE_SERIAL_DEBUG);
     Serial.println("Init.....");
     init_sensors(&sensor);
@@ -40,11 +38,12 @@ void setup()
 
     while(1)
     {
-        //while(Serial1.available() > 0)
-            //if(gps.encode(Serial1.read()) && gps.location.isValid()){
+        while(Serial1.available() > 0){
+            if(gps.encode(Serial1.read()) && gps.location.isValid()){
                 dataProcessing(&gps, &sensor, &p_dados, &tamanhoStr);
                 send_data(p_dados, &tamanhoStr);
-            //}
+            }
+        }
 
         os_runloop_once();  
     }
