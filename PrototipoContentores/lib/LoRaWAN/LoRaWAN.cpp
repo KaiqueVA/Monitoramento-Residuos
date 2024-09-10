@@ -12,8 +12,8 @@ void os_getDevKey (u1_t* buf) {}
 void init_lorawan(u1_t *NWKSKEY, size_t nwkskey_size, u1_t *APPSKEY, size_t appskey_size, u4_t DEVADDR)
 {
     int b;
-    uint8_t appskey[sizeof(APPSKEY)];
-    uint8_t nwkskey[sizeof(NWKSKEY)];
+    uint8_t appskey[appskey_size];
+    uint8_t nwkskey[nwkskey_size];
     SPI.begin(RADIO_SCLK_PORT, RADIO_MISO_PORT, RADIO_MOSI_PORT);
 
     os_init();
