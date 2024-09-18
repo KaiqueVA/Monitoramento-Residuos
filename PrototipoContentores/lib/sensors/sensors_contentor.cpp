@@ -2,12 +2,18 @@
 #include "defines.h"
 #include <Arduino.h>
 
+#define R1              39000.0
+#define R2              47000.0
+#define MIN_VOLTAGE     3.0
+#define MAX_VOLTAGE     4.2
+
+
 
 void init_sensors(VL53L0X *sensor)
 {
     Serial1.begin(9600, SERIAL_8N1, 16, 17);
-
-    pinMode(GPIO_1, INPUT_PULLDOWN);
+    analogReadResolution(12);
+    pinMode(GPIO_1, INPUT);
     pinMode(XSHUT, OUTPUT);
     pinMode(GPS_SLEEP, OUTPUT);
     pinMode(INCLINACAO, INPUT);
@@ -33,21 +39,25 @@ void init_sensors(VL53L0X *sensor)
 
 uint8_t leituraBat()
 {
-    long batSoma = 0;
-    uint8_t batPorcent;
-    for(int i = 0; i < 50; i++)
-    {
-        batSoma += analogRead(BAT_MON);
-    }
-    batPorcent = map(batSoma/50, 3755, 2555, 100, 0);
-    if(batPorcent > 100)
-    {
-        batPorcent = 100;
-        Serial.print("ALERTA! Passou de 100% - ");
-    }
+    int batReading = analogReadMilliVolts(BAT_MON);
+    int batPorcent;
+    float batVoltage;
+    float batVoltageBattery;
+    
 
+    batVoltage = (((float)batReading) / 4095.0) * 3.3;
+
+    batVoltageBattery = batVoltage * (R1 + R2) / R2;
+
+    Serial.printf("Tensão medida: %f V\n", batVoltageBattery);
+
+    batPorcent = (((batVoltageBattery - MIN_VOLTAGE) / (MAX_VOLTAGE - MIN_VOLTAGE)) * 100.0);
+
+    if(batPorcent > 100)
+        batPorcent = 100;
     if(batPorcent < 0)
         batPorcent = 0;
+    
     Serial.print(batPorcent);
     Serial.println("%");
     return batPorcent;
