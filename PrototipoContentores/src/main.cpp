@@ -7,6 +7,12 @@
 #include "data_processing.h"
 
 
+uint8_t flag_vl53l0v = 0;
+
+void IRAM_ATTR gpio1()
+{
+    flag_vl53l0v = 1;
+}
 
 /* Constantes do LMIC */
 const lmic_pinmap lmic_pins = {
@@ -32,18 +38,21 @@ void setup()
 
     Serial.begin(BAUDRATE_SERIAL_DEBUG);
     Serial.println("Init.....");
+
+    attachInterrupt(GPIO_1, gpio1, RISING);
+
     init_sensors(&sensor);
 
     init_lorawan(NWKSKEY, sizeof(NWKSKEY), APPSKEY, sizeof(APPSKEY), DEVADDR);
 
     while(1)
     {
-        while(Serial1.available() > 0){
-            if(gps.encode(Serial1.read()) && gps.location.isValid()){
+        // while(Serial1.available() > 0){
+        //     if(gps.encode(Serial1.read()) && gps.location.isValid()){
                 dataProcessing(&gps, &sensor, &p_dados, &tamanhoStr);
                 send_data(p_dados, &tamanhoStr);
-            }
-        }
+        //     }
+        // }
 
         os_runloop_once();  
     }
