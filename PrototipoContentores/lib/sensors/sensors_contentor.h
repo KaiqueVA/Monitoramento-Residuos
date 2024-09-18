@@ -5,6 +5,8 @@
 #include <VL53L0X.h>
 #include <TinyGPSPlus.h>
 
+extern uint8_t flag_vl53l0v;
+
 void init_sensors(VL53L0X *sensor);
 uint8_t leituraBat();
 uint16_t leituraSensor(VL53L0X *sensor);
