@@ -145,3 +145,8 @@ void send_data(char *data, uint8_t *size)
     Serial.println(F("Enviando pacote"));
 
 }
+
+uint32_t verifyTransmition()
+{
+    return (LMIC.opmode & OP_TXRXPEND);	
+}
