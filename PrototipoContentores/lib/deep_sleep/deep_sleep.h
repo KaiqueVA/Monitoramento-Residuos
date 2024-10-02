@@ -3,6 +3,12 @@
 
 #include "stdint.h"
 
+extern uint8_t rtc_wockUp;
+
 void espSleep(uint32_t minutesSleep);
+
+void gpsSleep(void);
+
+bool verifyWokeUpTimes(void);
 
 #endif
