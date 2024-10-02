@@ -7,10 +7,16 @@
 
 extern uint8_t flag_vl53l0v;
 
-void init_sensors(VL53L0X *sensor);
+typedef struct
+{
+    double latitude;
+    double longitude;
+}gps_data_t;
+
+void init_sensors(VL53L0X *sensor, bool *gpsFlag);
 uint8_t leituraBat();
 uint16_t leituraSensor(VL53L0X *sensor);
-void getGPS(TinyGPSPlus *gps, double *p_lat, double *p_lon);
+void getGPS(TinyGPSPlus *gps, gps_data_t *gps_data);
 
 
 
