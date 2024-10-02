@@ -1,6 +1,7 @@
 #include "sensors_contentor.h"
 #include "defines.h"
 #include <Arduino.h>
+#include "deep_sleep.h"
 
 #define R1              39000.0
 #define R2              47000.0
@@ -9,8 +10,9 @@
 
 
 
-void init_sensors(VL53L0X *sensor)
+void init_sensors(VL53L0X *sensor, bool *gpsFlag)
 {
+    *gpsFlag = verifyWokeUpTimes();
     Serial1.begin(9600, SERIAL_8N1, 16, 17);
     analogReadResolution(12);
     pinMode(GPIO_1, INPUT);
@@ -18,6 +20,11 @@ void init_sensors(VL53L0X *sensor)
     pinMode(GPS_SLEEP, OUTPUT);
     pinMode(INCLINACAO, INPUT);
 
+    Serial.println(*gpsFlag);
+    if(*gpsFlag){
+        digitalWrite(GPS_SLEEP, HIGH);
+        Serial1.print("$PMTK225,0*2B\r\n");
+    }
     digitalWrite(GPS_SLEEP, LOW);
     digitalWrite(XSHUT, HIGH);
     Wire.begin();
@@ -34,7 +41,6 @@ void init_sensors(VL53L0X *sensor)
     sensor->setVcselPulsePeriod(VL53L0X::VcselPeriodFinalRange, 14);
     sensor->setMeasurementTimingBudget(200000);
 
-    digitalWrite(GPS_SLEEP, HIGH);
 }
 
 uint8_t leituraBat()
@@ -76,8 +82,8 @@ uint16_t leituraSensor(VL53L0X *sensor)
     return contSensor/10;
 }
 
-void getGPS(TinyGPSPlus *gps, double *p_lat, double *p_lon)
+void getGPS(TinyGPSPlus *gps, gps_data_t *gps_data)
 {
-    *p_lat = gps->location.lat();
-    *p_lon = gps->location.lng();
+    gps_data->latitude = gps->location.lat();
+    gps_data->longitude = gps->location.lng();
 }
