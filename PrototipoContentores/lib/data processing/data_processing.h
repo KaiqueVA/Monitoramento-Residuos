@@ -5,7 +5,9 @@
 #include "sensors_contentor.h"
 
 
-void dataProcessing(TinyGPSPlus *gps, VL53L0X *sensor, char **p_dados, uint8_t *tamanhoStr);
+void dataProcessing( VL53L0X *sensor, gps_data_t *gps_data, char **p_dados, uint8_t *tamanhoStr);
+void dataProcessing_no_gps(VL53L0X *sensor, gps_data_t *gps_data, char **p_dados, uint8_t *tamanhoStr);
+
 
 
 #endif
