@@ -26,9 +26,6 @@ const lmic_pinmap lmic_pins = {
 };
 
 
-
-
-
 void setup() 
 {
     u1_t NWKSKEY[16] = { 0x51, 0xA1, 0x58, 0x94, 0x25, 0x46, 0x31, 0x42, 0x02, 0x35, 0x15, 0x35, 0x89, 0x46, 0x32, 0x51 };
@@ -76,7 +73,6 @@ void setup()
             send_data(p_dados, &tamanhoStr);
         }
         
-    	//Serial.println("Vai entrar no os_runloop_once");
         os_runloop_once();  
     }
 }
