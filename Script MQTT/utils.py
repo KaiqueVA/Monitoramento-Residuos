@@ -1,6 +1,7 @@
 import json
 from decimal import Decimal
 from datetime import datetime
+from data_base import insert_data_to_db
 
 def hex_to_ascii(hex_str):
     try:
@@ -10,7 +11,7 @@ def hex_to_ascii(hex_str):
     except ValueError:
         return "Erro ao converter hexadecimal para ASCII"
 
-def decode(message, devaddr):
+def decode(message, devaddr, rssi):
     battery = int(Decimal(message[:3]))
     volume = int(Decimal(message[3:7]))
     latitude = float(Decimal(message[7:17]))
@@ -25,9 +26,20 @@ def decode(message, devaddr):
         "IsTippedOver": is_tipped_over,
         "Latitude": latitude,
         "Longitude": longitude,
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "rssi": rssi
     }
+    
+    insert_data_to_db(
+        devaddr=devaddr, 
+        battery=battery, 
+        volume=volume / 10, 
+        is_tipped_over=is_tipped_over, 
+        latitude=latitude, 
+        longitude=longitude, 
+        timestamp=command["timestamp"], 
+        rssi=rssi
+    )
 
     
     json_data = json.dumps(command)
