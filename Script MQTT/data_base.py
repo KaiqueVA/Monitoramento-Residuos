@@ -15,7 +15,7 @@ def create_table():
         try:
             cursor = connection.cursor()
             create_table_query = """
-            CREATE TABLE IF NOT EXISTS dados_lorawan (
+            CREATE TABLE IF NOT EXISTS CONTENTOR (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 devaddr TEXT,
                 battery INTEGER,
@@ -42,7 +42,7 @@ def insert_data_to_db(devaddr, battery, volume, is_tipped_over, latitude, longit
         try:
             cursor = connection.cursor()
             insert_query = """
-            INSERT INTO dados_lorawan (devaddr, battery, volume, is_tipped_over, latitude, longitude, timestamp, rssi)
+            INSERT INTO CONTENTOR (devaddr, battery, volume, is_tipped_over, latitude, longitude, timestamp, rssi)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """
             cursor.execute(insert_query, (devaddr, battery, volume, is_tipped_over, latitude, longitude, timestamp, rssi))
