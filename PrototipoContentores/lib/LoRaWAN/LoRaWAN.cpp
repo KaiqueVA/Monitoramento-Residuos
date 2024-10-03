@@ -102,7 +102,7 @@ void onEvent (ev_t e)
 
             LMIC_shutdown();
             gpsSleep();
-            espSleep(1);
+            espSleep(60);
 
 
             break;
