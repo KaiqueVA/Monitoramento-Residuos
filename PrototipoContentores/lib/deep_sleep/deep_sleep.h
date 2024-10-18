@@ -11,4 +11,7 @@ void gpsSleep(void);
 
 bool verifyWokeUpTimes(void);
 
+void lightSleep(uint32_t secondsSleep);
+
+
 #endif
