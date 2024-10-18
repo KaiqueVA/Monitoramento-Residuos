@@ -1,5 +1,4 @@
 #include <Arduino.h>
-
 #include "defines.h"
 #include "LoRaWAN.h"
 #include "sensors_contentor.h"
@@ -46,8 +45,9 @@ void setup()
 
     Serial.begin(BAUDRATE_SERIAL_DEBUG);
     Serial.println("Init.....");
+    
 
-    Serial.printf("Lat: %.6f | Lon: %.6f", latitude, longitude);
+    Serial.println(getCpuFrequencyMhz());
 
     attachInterrupt(GPIO_1, gpio1, RISING);
 
@@ -60,17 +60,20 @@ void setup()
         {
             if(Serial1.available() > 0){
                 if(gps.encode(Serial1.read()) && gps.location.isValid()){
-                    getGPS(&gps, &gps_data);
-                    dataProcessing(&sensor, &gps_data, &p_dados, &tamanhoStr);
-                    latitude = gps_data.latitude;
-                    longitude = gps_data.longitude;
-                    send_data(p_dados, &tamanhoStr);
+
+                        getGPS(&gps, &gps_data);
+                        dataProcessing(&sensor, &gps_data, &p_dados, &tamanhoStr);
+                        latitude = gps_data.latitude;
+                        longitude = gps_data.longitude;
+                        send_data(p_dados, &tamanhoStr);
+                        digitalWrite(XSHUT, LOW);
                 }
             }
         }else
         {
-            dataProcessing_no_gps(&sensor, &gps_data, &p_dados, &tamanhoStr);
-            send_data(p_dados, &tamanhoStr);
+                dataProcessing_no_gps(&sensor, &gps_data, &p_dados, &tamanhoStr);
+                send_data(p_dados, &tamanhoStr);
+                digitalWrite(XSHUT, LOW);
         }
         
         os_runloop_once();  
