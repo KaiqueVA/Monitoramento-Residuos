@@ -16,13 +16,15 @@
 #define RADIO_DIO2_PORT 25
 
 #define uS_TO_S_FACTOR 1000000
+#define uS_TO_mS_FACTOR 1000  
 
 #define SLEEP_TIME 30 //minutes
 
 #define BAT_MON  35
-#define GPS_SLEEP 33
+#define GPS_SLEEP 2 //correto 2
 #define GPIO_1 4
-#define XSHUT 32
+#define SLEEP_LDO 32
 #define INCLINACAO 34
+#define XSHUT 13
 
 #endif
