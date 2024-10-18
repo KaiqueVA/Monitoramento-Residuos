@@ -101,6 +101,8 @@ void onEvent (ev_t e)
             }
 
             LMIC_shutdown();
+            digitalWrite(XSHUT, LOW);
+            digitalWrite(SLEEP_LDO, LOW);
             gpsSleep();
             espSleep(60);
 
