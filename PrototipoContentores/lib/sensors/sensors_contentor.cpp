@@ -6,26 +6,33 @@
 #define R1              39000.0
 #define R2              47000.0
 #define MIN_VOLTAGE     3.0
-#define MAX_VOLTAGE     4.2
+#define MAX_VOLTAGE     3.7
 
 
 
 void init_sensors(VL53L0X *sensor, bool *gpsFlag)
 {
     *gpsFlag = verifyWokeUpTimes();
+    
     Serial1.begin(9600, SERIAL_8N1, 16, 17);
     analogReadResolution(12);
     pinMode(GPIO_1, INPUT);
     pinMode(XSHUT, OUTPUT);
+    pinMode(SLEEP_LDO, OUTPUT);
     pinMode(GPS_SLEEP, OUTPUT);
     pinMode(INCLINACAO, INPUT);
 
-    Serial.println(*gpsFlag);
     if(*gpsFlag){
+        Serial.println("GPS ON");
         digitalWrite(GPS_SLEEP, HIGH);
         Serial1.print("$PMTK225,0*2B\r\n");
+        Serial.write(Serial1.read());
     }
+    lightSleep(1);
     digitalWrite(GPS_SLEEP, LOW);
+
+    //gpsSleep();
+    digitalWrite(SLEEP_LDO, HIGH);
     digitalWrite(XSHUT, HIGH);
     Wire.begin();
     sensor->setTimeout(500);
