@@ -22,14 +22,14 @@ void init_sensors(VL53L0X *sensor, bool *gpsFlag)
     pinMode(GPS_SLEEP, OUTPUT);
     pinMode(INCLINACAO, INPUT);
 
-    if(*gpsFlag){
-        Serial.println("GPS ON");
-        digitalWrite(GPS_SLEEP, HIGH);
-        Serial1.print("$PMTK225,0*2B\r\n");
-        Serial.write(Serial1.read());
-    }
+    // if(*gpsFlag){
+    //     Serial.println("GPS ON");
+    //     digitalWrite(GPS_SLEEP, HIGH);
+    //     Serial1.print("$PMTK225,0*2B\r\n");
+    //     Serial.write(Serial1.read());
+    // }
     lightSleep(1);
-    digitalWrite(GPS_SLEEP, LOW);
+    digitalWrite(GPS_SLEEP, HIGH);
 
     //gpsSleep();
     digitalWrite(SLEEP_LDO, HIGH);
