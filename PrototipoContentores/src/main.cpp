@@ -56,7 +56,7 @@ void setup()
     init_lorawan(NWKSKEY, sizeof(NWKSKEY), APPSKEY, sizeof(APPSKEY), DEVADDR);
     while(1)
     {
-        if(gpsFlag == 1)
+        if(gpsFlag == 0)
         {
             if(Serial1.available() > 0){
                 if(gps.encode(Serial1.read()) && gps.location.isValid()){
@@ -73,7 +73,7 @@ void setup()
         {
                 dataProcessing_no_gps(&sensor, &gps_data, &p_dados, &tamanhoStr);
                 send_data(p_dados, &tamanhoStr);
-                digitalWrite(XSHUT, LOW);
+                //digitalWrite(XSHUT, LOW);
         }
         
         os_runloop_once();  
