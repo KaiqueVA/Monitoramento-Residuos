@@ -4,8 +4,8 @@
 #include "deep_sleep.h"
 
 #define R1              39000.0
-#define R2              47000.0
-#define MIN_VOLTAGE     3.0
+#define R2              49000.0
+#define MIN_VOLTAGE     3.3
 #define MAX_VOLTAGE     3.7
 
 
@@ -57,6 +57,12 @@ uint8_t leituraBat()
     float batVoltage;
     float batVoltageBattery;
     
+    // for(int i = 0; i < 50; i++)
+    // {
+    //     batReading += analogReadMilliVolts(BAT_MON);
+    // }
+
+    // batReading /= 50;
 
     batVoltage = (((float)batReading) / 4095.0) * 3.3;
 
