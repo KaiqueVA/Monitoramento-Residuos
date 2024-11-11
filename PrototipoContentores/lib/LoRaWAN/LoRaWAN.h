@@ -9,7 +9,7 @@ void init_lorawan(u1_t *NWKSKEY, size_t nwkskey_size, u1_t *APPSKEY, size_t apps
 void os_getArtEui (u1_t* buf);
 void os_getDevEui (u1_t* buf);
 void os_getDevKey (u1_t* buf);
-uint32_t verifyTransmition();
+uint16_t verifyTransmition();
 void send_data(char *data, uint8_t *size);
 
 #endif
