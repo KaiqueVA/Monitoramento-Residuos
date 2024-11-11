@@ -56,26 +56,28 @@ void setup()
     init_lorawan(NWKSKEY, sizeof(NWKSKEY), APPSKEY, sizeof(APPSKEY), DEVADDR);
     while(1)
     {
-        if(gpsFlag == 0)
+        if(gpsFlag == 1)
         {
             if(Serial1.available() > 0){
                 if(gps.encode(Serial1.read()) && gps.location.isValid()){
-
+                    if(verifyTransmition() == 0){
                         getGPS(&gps, &gps_data);
                         dataProcessing(&sensor, &gps_data, &p_dados, &tamanhoStr);
                         latitude = gps_data.latitude;
                         longitude = gps_data.longitude;
-                        send_data(p_dados, &tamanhoStr);
-                        digitalWrite(XSHUT, LOW);
+                    }
+                    Serial.printf("Verificando transmissao: %d\n", verifyTransmition());
+                    send_data(p_dados, &tamanhoStr);
+                    digitalWrite(XSHUT, LOW);
                 }
             }
         }else
         {
-                dataProcessing_no_gps(&sensor, &gps_data, &p_dados, &tamanhoStr);
-                send_data(p_dados, &tamanhoStr);
-                //digitalWrite(XSHUT, LOW);
+            dataProcessing_no_gps(&sensor, &gps_data, &p_dados, &tamanhoStr);
+            send_data(p_dados, &tamanhoStr);
+            //digitalWrite(XSHUT, LOW);
         }
-        
+
         os_runloop_once();  
     }
 }
