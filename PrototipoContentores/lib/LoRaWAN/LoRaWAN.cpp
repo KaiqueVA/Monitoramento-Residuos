@@ -104,7 +104,7 @@ void onEvent (ev_t e)
             digitalWrite(XSHUT, LOW);
             digitalWrite(SLEEP_LDO, LOW);
             gpsSleep();
-            espSleep(1);
+            espSleep(60);
 
 
             break;
@@ -144,7 +144,6 @@ void send_data(char *data, uint8_t *size)
         Serial.printf("Transmission already in progress %d\n", LMIC.opmode & OP_TXRXPEND);
         return;
     }
-    Serial.printf("Valor fila: %d\n", LMIC.opmode & OP_TXRXPEND);
     LMIC_setTxData2(1, (uint8_t*)data, *size, 0);
     Serial.println(F("Enviando pacote"));
 
