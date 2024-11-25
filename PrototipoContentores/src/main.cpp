@@ -45,9 +45,6 @@ void setup()
 
     Serial.begin(BAUDRATE_SERIAL_DEBUG);
     Serial.println("Init.....");
-    
-
-    Serial.println(getCpuFrequencyMhz());
 
     attachInterrupt(GPIO_1, gpio1, RISING);
 
@@ -60,12 +57,10 @@ void setup()
         {
             if(Serial1.available() > 0){
                 if(gps.encode(Serial1.read()) && gps.location.isValid()){
-                    if(verifyTransmition() == 0){
-                        getGPS(&gps, &gps_data);
-                        dataProcessing(&sensor, &gps_data, &p_dados, &tamanhoStr);
-                        latitude = gps_data.latitude;
-                        longitude = gps_data.longitude;
-                    }
+                    getGPS(&gps, &gps_data);
+                    dataProcessing(&sensor, &gps_data, &p_dados, &tamanhoStr);
+                    latitude = gps_data.latitude;
+                    longitude = gps_data.longitude;
                     Serial.printf("Verificando transmissao: %d\n", verifyTransmition());
                     send_data(p_dados, &tamanhoStr);
                     digitalWrite(XSHUT, LOW);
@@ -75,7 +70,7 @@ void setup()
         {
             dataProcessing_no_gps(&sensor, &gps_data, &p_dados, &tamanhoStr);
             send_data(p_dados, &tamanhoStr);
-            //digitalWrite(XSHUT, LOW);
+            digitalWrite(XSHUT, LOW);
         }
 
         os_runloop_once();  
