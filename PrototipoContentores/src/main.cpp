@@ -10,19 +10,18 @@ uint8_t flag_vl53l0v = 0;
 RTC_DATA_ATTR double latitude = 0;
 RTC_DATA_ATTR double longitude = 0;
 
-
-void IRAM_ATTR gpio1()
-{
-    flag_vl53l0v = 1;
-}
-
-/* Constantes do LMIC */
 const lmic_pinmap lmic_pins = {
     .nss = RADIO_NSS_PORT,
     .rxtx = LMIC_UNUSED_PIN,
     .rst = RADIO_RESET_PORT,
     .dio = {RADIO_DIO0_PORT, RADIO_DIO1_PORT, RADIO_DIO2_PORT},
 };
+
+void IRAM_ATTR gpio1()
+{
+    flag_vl53l0v = 1;
+}
+
 
 
 void setup() 
