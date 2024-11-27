@@ -35,7 +35,7 @@ void init_sensors(VL53L0X *sensor, bool *gpsFlag)
     }
     delay(10);
     digitalWrite(GPS_SLEEP, HIGH);
-
+    
     //gpsSleep();
     digitalWrite(SLEEP_LDO, HIGH);
     digitalWrite(XSHUT, HIGH);
