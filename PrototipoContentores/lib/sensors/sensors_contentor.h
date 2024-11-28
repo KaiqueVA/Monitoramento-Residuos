@@ -5,8 +5,6 @@
 #include <VL53L0X.h>
 #include <TinyGPSPlus.h>
 
-extern uint8_t flag_vl53l0v;
-
 typedef struct
 {
     double latitude;
