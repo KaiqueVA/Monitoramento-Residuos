@@ -6,7 +6,6 @@
 #include "data_processing.h"
 
 
-uint8_t flag_vl53l0v = 0;
 RTC_DATA_ATTR double latitude = 0;
 RTC_DATA_ATTR double longitude = 0;
 
@@ -16,12 +15,6 @@ const lmic_pinmap lmic_pins = {
     .rst = RADIO_RESET_PORT,
     .dio = {RADIO_DIO0_PORT, RADIO_DIO1_PORT, RADIO_DIO2_PORT},
 };
-
-void IRAM_ATTR gpio1()
-{
-    flag_vl53l0v = 1;
-}
-
 
 
 void setup() 
@@ -44,8 +37,6 @@ void setup()
 
     Serial.begin(BAUDRATE_SERIAL_DEBUG);
     Serial.println("Init.....");
-
-    attachInterrupt(GPIO_1, gpio1, RISING);
 
     init_sensors(&sensor, &gpsFlag);
 
