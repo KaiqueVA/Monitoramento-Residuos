@@ -62,13 +62,6 @@ uint8_t leituraBat()
     float batVoltage;
     float batVoltageBattery;
     
-    // for(int i = 0; i < 50; i++)
-    // {
-    //     batReading += analogReadMilliVolts(BAT_MON);
-    // }
-
-    // batReading /= 50;
-
     batVoltage = (((float)batReading) / 4095.0) * 3.3;
 
     batVoltageBattery = batVoltage * (R1 + R2) / R2;
