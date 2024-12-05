@@ -51,7 +51,6 @@ void setup()
                     dataProcessing(&sensor, &gps_data, &p_dados, &tamanhoStr);
                     latitude = gps_data.latitude;
                     longitude = gps_data.longitude;
-                    Serial.printf("Verificando transmissao: %d\n", verifyTransmition());
                     send_data(p_dados, &tamanhoStr);
                     digitalWrite(XSHUT, LOW);
                 }
