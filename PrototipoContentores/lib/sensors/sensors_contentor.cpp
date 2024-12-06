@@ -6,7 +6,7 @@
 #define R1              39000.0
 #define R2              49000.0
 #define MIN_VOLTAGE     3.3
-#define MAX_VOLTAGE     3.7
+#define MAX_VOLTAGE     3.6
 
 
 
