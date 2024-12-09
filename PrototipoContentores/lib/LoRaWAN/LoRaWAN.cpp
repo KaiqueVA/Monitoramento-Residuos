@@ -137,7 +137,7 @@ void onEvent (ev_t e)
 }
 
 
-void send_data(char *data, uint8_t *size)
+void send_data(char *data, uint8_t *size, uint8_t *confirm)
 {
     if(LMIC.opmode & OP_TXRXPEND)
     {
@@ -146,6 +146,7 @@ void send_data(char *data, uint8_t *size)
     }
     LMIC_setTxData2(1, (uint8_t*)data, *size, 0);
     Serial.println(F("Enviando pacote"));
+    *confirm = 1;
 
 }
 
