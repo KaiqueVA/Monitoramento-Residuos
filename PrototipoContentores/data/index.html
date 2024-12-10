@@ -8,18 +8,19 @@
 </head>
 <body>
   <h1>Configurar LoRaWAN</h1>
-  <form id="lorawan-form">
-    <label for="devaddr">DevAddr</label>
-    <input type="text" id="devaddr" name="devaddr" placeholder="Ex: 26011FAD" maxlength="8" required>
-
-    <label for="nwkskey">NwkSKey</label>
-    <input type="text" id="nwkskey" name="nwkskey" placeholder="Ex: 00112233445566778899AABBCCDDEE" maxlength="32" required>
-
-    <label for="appskey">AppSKey</label>
-    <input type="text" id="appskey" name="appskey" placeholder="Ex: 00112233445566778899AABBCCDDEE" maxlength="32" required>
-
+  <form id="config-form">
+    <label for="devaddr">DevAddr:</label>
+    <input type="text" id="devaddr" name="devaddr" required>
+    <br>
+    <label for="nwkskey">NwkSKey:</label>
+    <input type="text" id="nwkskey" name="nwkskey" required>
+    <br>
+    <label for="appskey">AppSKey:</label>
+    <input type="text" id="appskey" name="appskey" required>
+    <br>
     <button type="submit">Enviar</button>
   </form>
+  
   <script src="script.js"></script>
 </body>
 </html>
