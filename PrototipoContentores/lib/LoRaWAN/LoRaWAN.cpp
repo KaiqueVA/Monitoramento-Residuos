@@ -4,6 +4,7 @@
 #include <SPI.h>
 #include <Arduino.h>
 #include "deep_sleep.h"
+#include "armazenamento.h"
 
 void os_getArtEui (u1_t* buf) {}
 void os_getDevEui (u1_t* buf) {}
@@ -155,4 +156,40 @@ uint16_t verifyTransmition()
     if(LMIC.opmode & OP_TXRXPEND == 0)
         return 1;
     return 0;
+}
+
+
+void loadLoRaWanKeys(u1_t *NWKSKEY, size_t nwkskey_size, u1_t *APPSKEY, size_t appskey_size, u4_t *DEVADDR, size_t devaddr_size)
+{
+    if (!SPIFFS.exists("/lorawan_config.bin")) {
+        Serial.println("Arquivo de configuração não encontrado.");
+        return;
+    }
+
+    File file = SPIFFS.open("/lorawan_config.bin", FILE_READ);
+    if (!file) {
+        Serial.println("Erro ao abrir o arquivo de configuração.");
+        return;
+    }
+
+    file.read((uint8_t*)DEVADDR, devaddr_size);
+    file.read(NWKSKEY, nwkskey_size);
+    file.read(APPSKEY, appskey_size);
+
+    file.close();
+
+    Serial.println("Chaves carregadas com sucesso!");
+    // Aqui desreferenciamos o ponteiro DEVADDR para exibir o valor real
+    Serial.printf("DevAddr: 0x%08X\n", *DEVADDR);
+    Serial.print("NwkSKey: ");
+    for (int i = 0; i < 16; i++) {
+        Serial.printf("0x%02X ", NWKSKEY[i]);
+    }
+    Serial.println();
+
+    Serial.print("AppSKey: ");
+    for (int i = 0; i < 16; i++) {
+        Serial.printf("0x%02X ", APPSKEY[i]);
+    }
+    Serial.println();
 }
