@@ -1,25 +1,32 @@
-const form = document.getElementById('lorawan-form');
+document.getElementById("config-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
+  const devaddr = document.getElementById("devaddr").value.trim();
+  const nwkskey = document.getElementById("nwkskey").value.trim();
+  const appskey = document.getElementById("appskey").value.trim();
 
-  // Obter valores do formulário
-  const devaddr = document.getElementById('devaddr').value;
-  const nwkskey = document.getElementById('nwkskey').value;
-  const appskey = document.getElementById('appskey').value;
+  const payload = {
+    devaddr: devaddr,
+    nwkskey: nwkskey,
+    appskey: appskey,
+  };
 
-  // Enviar dados ao servidor
-  const response = await fetch('/config-lorawan', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ devaddr, nwkskey, appskey }),
-  });
+  try {
+    const response = await fetch("/config-lorawan", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-  if (response.ok) {
-    alert('Configuração enviada com sucesso!');
-  } else {
-    alert('Erro ao enviar configuração!');
+    const result = await response.json();
+    if (result.status === "success") {
+      alert("Configuração salva com sucesso!");
+    } else {
+      alert(`Erro: ${result.message}`);
+    }
+  } catch (error) {
+    alert("Erro ao enviar configuração: " + error.message);
   }
 });
