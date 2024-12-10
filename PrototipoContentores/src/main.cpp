@@ -209,12 +209,12 @@ void setup()
             if(Serial1.available() > 0){
                 if(gps.encode(Serial1.read()) && gps.location.isValid()){
                     if(confirm == 0){
-                        getGPS(&gps, &gps_data);
-                        dataProcessing(&sensor, &gps_data, &p_dados, &tamanhoStr);
-                        latitude = gps_data.latitude;
-                        longitude = gps_data.longitude;
-                        send_data(p_dados, &tamanhoStr, &confirm);
-                        digitalWrite(XSHUT, LOW);
+                    getGPS(&gps, &gps_data);
+                    dataProcessing(&sensor, &gps_data, &p_dados, &tamanhoStr);
+                    latitude = gps_data.latitude;
+                    longitude = gps_data.longitude;
+                    send_data(p_dados, &tamanhoStr, &confirm);
+                    digitalWrite(XSHUT, LOW);
                     }
                 }
             }
