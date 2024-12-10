@@ -10,6 +10,6 @@ void os_getArtEui (u1_t* buf);
 void os_getDevEui (u1_t* buf);
 void os_getDevKey (u1_t* buf);
 uint16_t verifyTransmition();
-void send_data(char *data, uint8_t *size);
+void send_data(char *data, uint8_t *size, uint8_t *confirm);
 
 #endif
