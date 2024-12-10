@@ -107,64 +107,71 @@ void setup()
         });
 
 
-        server.on("/config-lorawan", HTTP_POST, [](AsyncWebServerRequest *request) {
-        if (request->hasParam("body", true)) {
-            String body = request->getParam("body", true)->value();
-            Serial.println("Configuração recebida:");
-            Serial.println(body);
+        server.on("/config-lorawan", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL,
+            [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+                String body = "";
+                for (size_t i = 0; i < len; i++) {
+                    body += (char)data[i];
+                }
 
-            DynamicJsonDocument doc(512);
-            DeserializationError error = deserializeJson(doc, body);
-            if (error) {
-                Serial.print("Erro ao parsear JSON: ");
-                Serial.println(error.c_str());
-                request->send(400, "application/json", "{\"status\":\"error\",\"message\":\"Invalid JSON\"}");
-                return;
-            }
+                Serial.println("Dados recebidos:");
+                Serial.println(body);
 
-            const char *devaddr = doc["devaddr"];
-            const char *nwkskey = doc["nwkskey"];
-            const char* appskey = doc["appskey"];
+                StaticJsonDocument<512> doc;
+                DeserializationError error = deserializeJson(doc, body);
 
-            if (strlen(devaddr) != 8 || strlen(nwkskey) != 32 || strlen(appskey) != 32) {
-                Serial.println("Erro: Dados inválidos");
-                request->send(400, "application/json", "{\"status\":\"error\",\"message\":\"Invalid key length\"}");
-                return;
-            }
+                if (error) {
+                    Serial.print("Erro ao parsear JSON: ");
+                    Serial.println(error.c_str());
+                    request->send(400, "application/json", "{\"status\":\"error\",\"message\":\"Invalid JSON\"}");
+                    return;
+                }
 
-            File file = SPIFFS.open("/lorawan_config.bin", FILE_WRITE);
-            if (!file) {
-                Serial.println("Erro ao abrir o arquivo para escrita");
-                request->send(500, "application/json", "{\"status\":\"error\",\"message\":\"Failed to save config\"}");
-                return;
-            }
+                const char* devaddr = doc["devaddr"];
+                const char* nwkskey = doc["nwkskey"];
+                const char* appskey = doc["appskey"];
 
-            uint32_t devaddr_bytes = strtoul(devaddr, nullptr, 16);
-            file.write((uint8_t*)&devaddr_bytes, sizeof(devaddr_bytes));
+                if (!devaddr || strlen(devaddr) != 8 || !nwkskey || !appskey) {
+                    Serial.println("Erro: Campos ausentes no JSON");
+                    request->send(400, "application/json", "{\"status\":\"error\",\"message\":\"Missing fields\"}");
+                    return;
+                }
 
-            uint8_t nwkskey_bytes[16];
-            for (int i = 0; i < 16; i++) {
-                nwkskey_bytes[i] = strtoul(String(nwkskey).substring(i * 2, i * 2 + 2).c_str(), nullptr, 16);
-            }
-            file.write(nwkskey_bytes, sizeof(nwkskey_bytes));
+                // Salvando os dados no SPIFFS (como no exemplo anterior)
+                File file = SPIFFS.open("/lorawan_config.bin", FILE_WRITE);
+                if (!file) {
+                    Serial.println("Erro ao abrir o arquivo para escrita");
+                    request->send(500, "application/json", "{\"status\":\"error\",\"message\":\"Failed to save config\"}");
+                    return;
+                }
 
-            uint8_t appskey_bytes[16];
-            for (int i = 0; i < 16; i++) {
-                appskey_bytes[i] = strtoul(String(appskey).substring(i * 2, i * 2 + 2).c_str(), nullptr, 16);
-            }
-            file.write(appskey_bytes, sizeof(appskey_bytes)); // Escreve o vetor no arquivo
+                uint32_t devaddr_bytes = (uint32_t)strtoul(devaddr, nullptr, 16);
 
-            file.close();
+                Serial.print("DevAddr: 0x");
+                Serial.println(devaddr_bytes, HEX);
 
-            Serial.println("Configuração salva com sucesso!");
+                file.write((uint8_t*)&devaddr_bytes, sizeof(devaddr_bytes));
 
-            request->send(200, "application/json", "{\"status\":\"success\"}");
-            delay(100);
-            esp_restart();
-        } else {
-            request->send(400, "application/json", "{\"status\":\"error\"}");
-        }
-        });
+                uint8_t nwkskey_bytes[16];
+                for (int i = 0; i < 16; i++) {
+                    nwkskey_bytes[i] = strtoul(String(nwkskey).substring(i * 2, i * 2 + 2).c_str(), nullptr, 16);
+                }
+                file.write(nwkskey_bytes, sizeof(nwkskey_bytes));
+
+                uint8_t appskey_bytes[16];
+                for (int i = 0; i < 16; i++) {
+                    appskey_bytes[i] = strtoul(String(appskey).substring(i * 2, i * 2 + 2).c_str(), nullptr, 16);
+                }
+                file.write(appskey_bytes, sizeof(appskey_bytes));
+
+                file.close();
+
+                Serial.println("Configuração salva com sucesso!");
+                request->send(200, "application/json", "{\"status\":\"success\"}");
+
+                delay(100);
+                esp_restart();
+            });
 
         // Iniciar o servidor
         server.begin();
@@ -280,14 +287,14 @@ void loadLoRaWanKeys(u1_t *NWKSKEY, size_t nwkskey_size, u1_t *APPSKEY, size_t a
     }
 
     file.read((uint8_t*)DEVADDR, devaddr_size);
-
     file.read(NWKSKEY, nwkskey_size);
     file.read(APPSKEY, appskey_size);
 
     file.close();
 
     Serial.println("Chaves carregadas com sucesso!");
-    Serial.printf("DevAddr: 0x%08X\n", DEVADDR);
+    // Aqui desreferenciamos o ponteiro DEVADDR para exibir o valor real
+    Serial.printf("DevAddr: 0x%08X\n", *DEVADDR);
     Serial.print("NwkSKey: ");
     for (int i = 0; i < 16; i++) {
         Serial.printf("0x%02X ", NWKSKEY[i]);
