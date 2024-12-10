@@ -11,5 +11,6 @@ void os_getDevEui (u1_t* buf);
 void os_getDevKey (u1_t* buf);
 uint16_t verifyTransmition();
 void send_data(char *data, uint8_t *size, uint8_t *confirm);
+void loadLoRaWanKeys(u1_t *NWKSKEY, size_t nwkskey_size, u1_t *APPSKEY, size_t appskey_size, u4_t *DEVADDR, size_t devaddr_size);
 
 #endif
