@@ -69,7 +69,7 @@ void Config_manageWiFi::setupRoutes() {
                     Serial.println("Dados recebidos:");
                     Serial.println(body);
 
-                    StaticJsonDocument<512> doc;
+                    JsonDocument doc;
                     DeserializationError error = deserializeJson(doc, body);
 
                     if (error) {
@@ -82,6 +82,7 @@ void Config_manageWiFi::setupRoutes() {
                     const char* devaddr = doc["devaddr"];
                     const char* nwkskey = doc["nwkskey"];
                     const char* appskey = doc["appskey"];
+
 
                     if (!devaddr || strlen(devaddr) != 8 || !nwkskey || !appskey) {
                         Serial.println("Erro: Campos ausentes no JSON");
