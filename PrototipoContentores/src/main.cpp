@@ -7,14 +7,6 @@
 #include "config_manageWiFi.h"
 #include "armazenamento.h"
 
-//==================Config========================
-#include <WiFi.h>
-#include <ESPAsyncWebServer.h>
-#include <SPIFFS.h>
-#include <DNSServer.h>
-#include <ArduinoJson.h>
-//================================================
-
 RTC_DATA_ATTR double latitude = 0;
 RTC_DATA_ATTR double longitude = 0;
 
